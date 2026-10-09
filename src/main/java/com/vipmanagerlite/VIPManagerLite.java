@@ -57,8 +57,9 @@ public class VIPManagerLite extends JavaPlugin {
         // 初始化到期调度器
         expiryScheduler = new ExpiryScheduler(this);
 
-        // 启动时处理：为未过期的VIP安排到期任务，已过期的标记待清理
-        startupCleanup();
+        // 启动时的清理延迟到服务器启动完成后的首个 tick：
+        // 确保权限插件、命令提供者等均已启用，再执行组切换与 on-expire 命令
+        getServer().getScheduler().runTask(this, this::startupCleanup);
 
         // 注册玩家上线监听器（处理离线期间到期/标记待清理的玩家）
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
