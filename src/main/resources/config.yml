@@ -1,0 +1,67 @@
+# VIPManagerLite 配置文件
+
+# 工作模式: vault 或 command
+# vault: 使用 Vault API 进行权限组操作（需要安装 Vault 和权限插件）
+# command: 使用命令进行权限组操作（需要在每个组的 on-grant/on-expire 中配置权限组切换命令）
+mode: vault
+
+# 离线玩家处理方式（适用于VIP到期和手动remove）
+# immediate: 直接处理，离线玩家也立刻切换权限组并删除记录
+#            （需要权限插件支持离线操作，如 LuckPerms / GroupManager / PermissionsEx）
+# on-join:   先标记待清理，等玩家上线后再恢复权限组并删除记录（默认，兼容性最好）
+offline-mode: on-join
+
+# 数据库配置
+database:
+  # 数据库类型: sqlite 或 mysql
+  type: sqlite
+  
+  # 表前缀（用于避免与其他插件的表名冲突，SQLite和MySQL都生效）
+  table-prefix: vipmgr_
+  
+  # MySQL配置（仅当type为mysql时生效）
+  mysql:
+    host: localhost
+    port: 3306
+    database: vipmanager
+    username: root
+    password: ''
+
+# VIP组配置（只有在这里定义的组才能通过插件给予玩家）
+# 命令模式下的权限组切换命令需要写在 on-grant 和 on-expire 中
+# 例如：manuadd %player% %vipgroup% 或 lp user %player% parent set %vipgroup%
+vip-groups:
+  vip1:
+    alias: "初级VIP"
+    description: "享受基础VIP特权，包括额外的家园数量和传送点"
+    # 到期后回到的权限组（仅 Vault 模式生效）
+    # Command 模式下请在 on-expire 命令中手动切换权限组
+    # %originalgroup% 表示玩家开通VIP前的原始组
+    expire-group: "%originalgroup%"
+    commands:
+      on-grant:
+        - "say %player% 从 %originalgroup% 升级到了 %vipgroup%！"
+      on-expire:
+        - "say %player% 从 %vipgroup% 到期了降回了 %originalgroup%！"
+  
+  vip2:
+    alias: "高级VIP"
+    description: "享受高级VIP特权，包括更多家园数量和专属道具"
+    expire-group: "%originalgroup%"
+    commands:
+      on-grant:
+        - "say %player% 从 %originalgroup% 升级到了 %vipgroup%！"
+      on-expire:
+        - "say %player% 从 %vipgroup% 到期了降回了 %originalgroup%！"
+  
+  vip3:
+    alias: "至尊VIP"
+    description: "享受最高级VIP特权，包括无限家园和专属称号"
+    expire-group: "%originalgroup%"
+    commands:
+      on-grant:
+        - "say %player% 从 %originalgroup% 升级到了 %vipgroup%！"
+      on-expire:
+        - "say %player% 从 %vipgroup% 到期了降回了 %originalgroup%！"
+
+

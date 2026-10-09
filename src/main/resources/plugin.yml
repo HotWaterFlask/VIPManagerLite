@@ -1,0 +1,21 @@
+name: VIPManagerLite
+version: ${project.version}
+main: com.vipmanagerlite.VIPManagerLite
+api-version: '26.1.2'
+description: 轻量版限时VIP权限组管理插件
+softdepend: [Vault]
+
+# 依赖库由 Paper 在启动时自动下载到服务器的 libraries 目录
+libraries:
+  - org.xerial:sqlite-jdbc:3.42.0.0
+  - com.mysql:mysql-connector-j:8.0.33
+
+commands:
+  vipmgr:
+    description: VIP管理主命令
+    usage: /<command> <info|give|remove|list|look|upgrade|reload>
+
+permissions:
+  vipmanagerlite.admin:
+    description: 管理员权限，可使用give/remove/list/look/upgrade/reload命令
+    default: op
